@@ -1,0 +1,98 @@
+*{
+  margin: 0;
+  padding: 0;
+  font-size: 62.5%;
+}
+
+button{
+  cursor: pointer;
+  width: 20rem;
+  height: 10rem;
+  border-radius: 0.75rem;
+
+  margin: 1rem;
+  font-size: 2rem;
+}
+
+button:hover{
+  background: radial-gradient(circle, #f5f5f5, #d3d3d3, #e0e0e0, #d3d3d3);
+  font-weight: bold;
+}
+
+.addBtn:hover{
+  color: blue;
+}
+
+.minusBtn:hover{
+  color: red;
+}
+
+.App{
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+
+  min-width: 100vw;
+  min-height: 100vh;
+  background: conic-gradient(from -38deg at 50% 50%, 
+  #fff 0deg 20deg, 
+  #ebebeb 20deg 40deg,
+  #d5d5d5 40deg 60deg,
+  #a3a3a3 60deg 80deg,
+  #858585 80deg 100deg,
+  #717171 100deg, 120deg,
+  #9f9d9d 120deg, 140deg,
+
+  #717171 140deg, 160deg,
+  #858585 160deg 180deg,
+  #a3a3a3 180deg 200deg,
+  #d5d5d5 200deg 220deg,
+  #ebebeb 220deg 240deg,
+  #9f9d9d 240deg, 260deg,
+  #717171 260deg, 280deg,
+  #858585 280deg 300deg,
+  #a3a3a3 300deg 320deg,
+  #d5d5d5 320deg 340deg,
+  #bdbbbb 340deg 360deg);
+}
+
+.counter{
+  position: relative;
+  top: 2rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40rem;
+  height: 20rem;
+
+  font-size: 10rem;
+
+  border-radius: 0.75rem;
+  border-bottom: 2px solid black;
+
+
+}
+
+.flash{
+  animation: flash 0.5s linear;
+}
+
+@keyframes flash {
+  0% {
+    color: inherit;
+  }
+  50% {
+    color: gold; /* 변경할 색상 */
+  }
+  100% {
+    color: inherit;
+  }
+}
+
+
+
