@@ -1,10 +1,9 @@
 import styled from "styled-components";
 
-function Header()
-{
-  return(
+function Header() {
+  return (
     <SHeader>
-      <SImg src="./images/logo.png"/>
+      <SImg src="./images/logo.png" />
       <List>
         <Span>중고거래</Span>
         <Span>동네업체</Span>
@@ -16,8 +15,6 @@ function Header()
         <Sinput placeholder="멋사를 검색해보세요!"></Sinput>
         <Sbutton type="button">채팅하기</Sbutton>
       </span>
-      
-      
     </SHeader>
   );
 }
@@ -33,7 +30,6 @@ const SHeader = styled.header`
 
   width: 100vw;
   height: 10vh;
-  
 `;
 
 const SImg = styled.img`
@@ -46,14 +42,14 @@ const List = styled.div`
   justify-content: space-between;
 `;
 
-const Span= styled.span`
+const Span = styled.span`
   display: inline-block;
 
   font-size: 1rem;
   color: gray;
 
-  &:hover{
-    color:orange;
+  &:hover {
+    color: orange;
   }
 `;
 
@@ -64,8 +60,12 @@ const Sinput = styled.input`
 
   background-color: lightgray;
   border: solid lightgray 1px;
-  
+
   margin-right: 1rem;
+
+  @media screen and (max-width: 768px) {
+    width: 10rem;
+  }
 `;
 
 const Sbutton = styled.button`
@@ -73,7 +73,12 @@ const Sbutton = styled.button`
   height: 2rem;
   width: 4rem;
   background-color: white;
-  border: solid lightgray 1px
+  border: solid lightgray 1px;
+
+  @media screen and (max-width: 768px) {
+    width: 3rem;
+    font-size: 10px;
+  }
 `;
 
 export default Header;

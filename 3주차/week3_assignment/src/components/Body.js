@@ -2,11 +2,17 @@ import styled from "styled-components";
 import Card from "./Card";
 import CARDLIST from "../constant/CARDLIST.js";
 import Footer from "./Footer.js";
+import {useMediaQuery}  from "react-responsive";
 
 
 
 function Body()
 {
+  const isTablet = useMediaQuery({
+    query : "(min-width:1024px)"
+  });
+
+
   const cardList = JSON.parse(JSON.stringify(CARDLIST));
 
   return(
