@@ -1,11 +1,125 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import "./App.css";
 
 function App() {
+  const [todos, setTodos] = useState([]);
+  const [dones, setDones] = useState([]);
+  const [willRender, setWillRender] = useState(false);
+
+  //단락 평가 적극 활용 - 로컬스토리지에서 값을 가져와서 세팅해둠
+  useEffect(() => {
+    const getLocalStorage = () => {
+      localStorage.getItem("todos") &&
+        setTodos(JSON.parse(localStorage.getItem("todos")));
+
+      localStorage.getItem("dones") &&
+        setDones(JSON.parse(localStorage.getItem("dones")));
+
+      setWillRender(true);
+    };
+    getLocalStorage();
+  }, []);
+
+  useEffect(() => {
+    willRender && render();
+  }, [willRender]); //마운트시에만 가져오도록 해야 무한루프 안 빠짐
+
+  const renderTodos = () => {
+    todos.map((todo) => {
+      const list = document.createElement("li"); //list라 가져오면 안됨! li라고 가져오기
+
+      const spanText = document.createElement("span");
+      spanText.classList.add("listText");
+      spanText.innerText = todo;
+      list.appendChild(spanText);
+
+      const doneBtn = document.createElement("button");
+      doneBtn.classList.add("done");
+      doneBtn.onclick = moveDoneList;
+      const doneIcon = document.createElement("i");
+      doneIcon.classList.add("fa-solid", "fa-v");
+      doneBtn.appendChild(doneIcon);
+      list.appendChild(doneBtn);
+
+      const cancelBtn = document.createElement("button");
+      cancelBtn.classList.add("cancel");
+      cancelBtn.onclick = deleteList;
+      const cancelIcon = document.createElement("i");
+      cancelIcon.classList.add("fa-solid", "fa-xmark");
+      cancelBtn.appendChild(cancelIcon);
+      list.appendChild(cancelBtn);
+
+      const beforeDone = document.getElementById("beforeDone");
+      beforeDone.appendChild(list);
+    });
+  };
+
+  const renderDones = () => {
+    dones.map((done) => {
+      const list = document.createElement("li"); //list라 가져오면 안됨! li라고 가져오기
+
+      const spanText = document.createElement("span");
+      spanText.classList.add("listText");
+      spanText.innerText = done;
+      list.appendChild(spanText);
+
+      const doneBtn = document.createElement("button");
+      doneBtn.classList.add("done");
+      doneBtn.onclick = moveDoneList;
+      const doneIcon = document.createElement("i");
+      doneIcon.classList.add("fa-solid", "fa-v");
+      doneBtn.appendChild(doneIcon);
+      list.appendChild(doneBtn);
+
+      const cancelBtn = document.createElement("button");
+      cancelBtn.classList.add("cancel");
+      cancelBtn.onclick = deleteList;
+      const cancelIcon = document.createElement("i");
+      cancelIcon.classList.add("fa-solid", "fa-xmark");
+      cancelBtn.appendChild(cancelIcon);
+      list.appendChild(cancelBtn);
+
+      const afterDone = document.getElementById("afterDone");
+      afterDone.appendChild(list);
+    });
+  };
+
+  const render = () => {
+    renderTodos();
+    renderDones();
+  };
+
+  useEffect(() => {
+    console.log("todos 저장합니다", JSON.stringify(todos));
+    todos.length !== 0 && localStorage.setItem("todos", JSON.stringify(todos)); // todos가 변하면 항상 로컬스토리지에 즉각 반영해둠 (단, 리마운트로 인해 빈 배열일 경우는 생략)
+  }, [todos]);
+
+  useEffect(() => {
+    console.log("dones 저장합니다", JSON.stringify(dones));
+    dones.length !== 0 && localStorage.setItem("dones", JSON.stringify(dones)); // dones가 변하면 항상 로컬스토리지에 즉각 반영해둠 (단, 리마운트로 인해 빈 배열일 경우는 생략)
+  }, [dones]);
+
   const deleteList = (e) => {
     const list = e.currentTarget.parentNode;
+    //list의 자식요소인 span의 innerText를 가져와서, 해당 innerText의 값을,
+    //todos에 있는 값이라면 todos에서 삭제하고, dones에 있는 값이라면 dones에서 삭제하고 싶음 (이름으로 삭제해서는 안됨. 어디에 속해있는지 우선 파악 필요)
+    const ul = list.parentNode;
+    const text = list.querySelector("span").innerText;
+    if (ul.id === "beforeDone") {
+      //그럼 todos에 있다고 판단
+      todos.length === 1
+        ? setTodos([])
+        : setTodos((todos) => todos.filter((todo) => todo !== text));
+    } else {
+      //아니라면 dones에 있다고 판단
+      dones.length === 1
+        ? setDones([])
+        : setDones((dones) => dones.filter((done) => done !== text));
+    }
+
     list.remove();
   };
   const moveDoneList = (e) => {
@@ -15,6 +129,13 @@ function App() {
     if (ul.id === "beforeDone") {
       const beforeDone = document.getElementById("beforeDone");
       const afterDone = document.getElementById("afterDone");
+
+      //list의 자식요소인 span의 innerText를 가져와서, 해당 innerText의 값을 todos배열에서는 삭제하고, dones배열에는 추가하는 로직을 구상
+      const text = list.querySelector("span").innerText;
+      todos.length === 1
+        ? setTodos([])
+        : setTodos((todos) => todos.filter((todo) => todo !== text));
+      setDones((dones) => [...dones, text]);
 
       beforeDone.removeChild(list);
       afterDone.appendChild(list);
@@ -30,6 +151,8 @@ function App() {
     const input = toDoForm.querySelector("input");
 
     const newTodo = input.value;
+    setTodos((prev) => [...prev, newTodo]); //기존 배열에 있던 내용들 + 새로운 요소 추가
+
     input.value = "";
 
     const list = document.createElement("li"); //list라 가져오면 안됨! li라고 가져오기
@@ -144,6 +267,9 @@ const Main = styled.main`
   flex-wrap: nowrap; /*명시*/
 
   justify-content: center;
+  @media screen and (max-width: 1024px) {
+    gap: 2vw;
+  }
 `;
 
 const MainToDoSection = styled.section`
@@ -257,6 +383,14 @@ const MainToDoSection = styled.section`
       background-color: rgba(0, 0, 0, 0.3); /* 배경색: 블랙 */
       box-shadow: 0 0 20px rgba(255, 0, 127, 0.5),
         0 0 40px rgba(192, 192, 192, 0.8);
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    ul {
+      li {
+        width: 30vw;
+      }
     }
   }
 `;
