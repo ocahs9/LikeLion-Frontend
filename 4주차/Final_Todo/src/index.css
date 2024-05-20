@@ -1,0 +1,26 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  background: linear-gradient(to right, #000000, #c0c0c0);
+  /*body는 전체 문서의 크기이긴 하지만.. 
+  딱 요소들이 있는 만큼만 차지한다(따로 정하지 않으면)
+  그러나, background로 적용하면 전체에 적용된다. - 개념상 보이는 부분이 전부 body인 듯.
+  따라서, body의 최소값 = 보이는 곳 이라고 생각하는 게 좋을 듯 하다.
+ */
+}
+a {
+  text-decoration: none;
+}
+ul {
+  list-style: none;
+}
+button {
+  cursor: pointer; /*기본적으로 모든 버튼은 클릭할 수 있다는 것을 알린다*/
+}
+.fa-plus {
+  font-weight: 900;
+  font-size: 15px;
+}
